@@ -23,13 +23,14 @@ public class MovieCatalogResource {
     @GetMapping("/{userId}")
     public List<CatalogItem> getCatalog(@PathVariable("userId") String userId) {
         // get ratings by userId
-        List<Rating> ratings = restTemplate.getForObject("http://localhost:8083/users/" + userId, UserRating.class)
+        List<Rating> ratings = restTemplate.getForObject("http://ratins-data-service/users/" + userId, UserRating.class)
                 .getUserRatings();
 
         // get movie info for every rated movie from movie-info-servie
         // microservice
         return ratings.stream().map(rating -> {
-            Movie movie = restTemplate.getForObject("http://localhost:8082/movies/" + rating.getMovieId(), Movie.class);
+            Movie movie = restTemplate.getForObject("http://movie-info-service/movies/" + rating.getMovieId(),
+                    Movie.class);
             return new CatalogItem(movie.getName(), "", rating.getRating());
         }).collect(Collectors.toList());
     }
