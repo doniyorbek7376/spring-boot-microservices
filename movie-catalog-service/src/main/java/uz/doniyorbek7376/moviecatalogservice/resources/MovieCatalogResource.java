@@ -23,8 +23,8 @@ public class MovieCatalogResource {
     @GetMapping("/{userId}")
     public List<CatalogItem> getCatalog(@PathVariable("userId") String userId) {
         // get ratings by userId
-        List<Rating> ratings = restTemplate.getForObject("http://ratins-data-service/users/" + userId, UserRating.class)
-                .getUserRatings();
+        List<Rating> ratings = restTemplate
+                .getForObject("http://ratings-data-service/users/" + userId, UserRating.class).getUserRatings();
 
         // get movie info for every rated movie from movie-info-servie
         // microservice
